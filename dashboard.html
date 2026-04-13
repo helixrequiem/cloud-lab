@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudLab — Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+           background: #f4f5f7; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* topbar */
+    .topbar { display:flex; align-items:center; justify-content:space-between;
+              padding:12px 20px; background:white; border-bottom:1px solid #e5e7eb; }
+    .logo { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:600; }
+    .logo-icon { width:28px; height:28px; background:#185FA5; border-radius:6px;
+                 display:flex; align-items:center; justify-content:center; }
+    .logo-icon svg { width:14px; height:14px; fill:white; }
+    .user-info { display:flex; align-items:center; gap:12px; font-size:13px; color:#6b7280; }
+    .logout-btn { font-size:12px; padding:5px 12px; border:1px solid #e5e7eb;
+                  border-radius:6px; background:white; cursor:pointer; color:#6b7280; }
+    .logout-btn:hover { background:#f4f5f7; }
+
+    /* layout */
+    .layout { display:flex; flex:1; }
+    .sidebar { width:190px; background:white; border-right:1px solid #e5e7eb;
+               padding:16px 0; flex-shrink:0; }
+    .nav-section { font-size:10px; font-weight:600; color:#9ca3af; letter-spacing:.08em;
+                   text-transform:uppercase; padding:0 16px 4px; margin-top:12px; }
+    .nav-item { display:flex; align-items:center; gap:8px; padding:8px 16px;
+                font-size:13px; color:#6b7280; cursor:pointer;
+                border-left:2px solid transparent; transition:all .12s; }
+    .nav-item:hover { background:#f9fafb; color:#111; }
+    .nav-item.active { background:#f0f7ff; color:#185FA5;
+                       border-left-color:#185FA5; font-weight:500; }
+    .nav-dot { width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.5; }
+
+    /* main */
+    .main { flex:1; padding:24px; overflow:auto; }
+    .page { display:none; }
+    .page.active { display:block; }
+    .page-title { font-size:18px; font-weight:600; margin-bottom:20px; color:#111; }
+
+    /* metrics */
+    .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+    .metric { background:white; border:1px solid #e5e7eb; border-radius:10px; padding:16px; }
+    .metric-label { font-size:12px; color:#6b7280; margin-bottom:6px; }
+    .metric-val { font-size:24px; font-weight:600; }
+    .metric-val.blue { color:#185FA5; }
+    .metric-val.green { color:#3B6D11; }
+    .metric-val.amber { color:#854F0B; }
+
+    /* table */
+    .table-wrap { background:white; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; }
+    .table-head { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+                  padding:10px 16px; background:#f9fafb; font-size:11px; font-weight:600;
+                  color:#6b7280; text-transform:uppercase; letter-spacing:.05em;
+                  border-bottom:1px solid #e5e7eb; }
+    .table-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+                 padding:12px 16px; border-bottom:1px solid #f3f4f6;
+                 font-size:13px; align-items:center; }
+    .table-row:last-child { border-bottom:none; }
+    .table-row:hover { background:#fafafa; }
+    .empty { padding:32px; text-align:center; color:#9ca3af; font-size:13px; }
+
+    /* status pills */
+    .pill { display:inline-flex; align-items:center; gap:4px; font-size:11px;
+            font-weight:500; padding:3px 8px; border-radius:20px; }
+    .pill.running { background:#EAF3DE; color:#3B6D11; }
+    .pill.stopped { background:#f3f4f6; color:#6b7280; }
+    .pill.pending { background:#FAEEDA; color:#854F0B; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+    /* buttons */
+    .action-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .btn-primary { padding:8px 16px; background:#185FA5; color:white; border:none;
+                   border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; }
+    .btn-primary:hover { background:#0C447C; }
+    .btn-sm { font-size:11px; padding:4px 10px; border:1px solid #e5e7eb;
+              border-radius:6px; background:white; color:#6b7280; cursor:pointer; margin-right:4px; }
+    .btn-sm:hover { background:#f4f5f7; }
+    .btn-sm.red:hover { background:#FCEBEB; color:#A32D2D; border-color:#fca5a5; }
+
+    /* forms */
+    .form-card { background:white; border:1px solid #e5e7eb; border-radius:10px;
+                 padding:24px; max-width:480px; }
+    .form-row { margin-bottom:16px; }
+    .form-label { display:block; font-size:12px; font-weight:500;
+                  color:#374151; margin-bottom:5px; }
+    .form-input, .form-select { width:100%; padding:9px 12px; font-size:13px;
+                                 border:1px solid #d1d5db; border-radius:8px;
+                                 background:white; color:#111; outline:none; }
+    .form-input:focus, .form-select:focus { border-color:#185FA5; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+    /* monitor */
+    .monitor-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .monitor-card { background:white; border:1px solid #e5e7eb; border-radius:10px; padding:16px; }
+    .monitor-title { font-size:12px; font-weight:600; color:#6b7280;
+                     text-transform:uppercase; letter-spacing:.05em; margin-bottom:14px; }
+    .bar-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:12px; }
+    .bar-name { width:90px; color:#6b7280; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .bar-track { flex:1; height:8px; background:#f3f4f6; border-radius:4px; overflow:hidden; }
+    .bar-fill { height:100%; border-radius:4px; transition:width .6s ease; }
+    .bar-val { width:36px; text-align:right; font-weight:500; }
+
+    /* toast */
+    #toast { position:fixed; bottom:20px; right:20px; background:#185FA5; color:white;
+             padding:10px 18px; border-radius:8px; font-size:13px;
+             opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; }
+    #toast.show { opacity:1; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 16 16"><path d="M8 1L14 4.5v7L8 15 2 11.5v-7z"/></svg></div>
+    CloudLab Console
+  </div>
+  <div class="user-info">
+    <span id="user-name"></span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><div class="nav-dot"></div>Dashboard</div>
+    <div class="nav-section">Compute</div>
+    <div class="nav-item" onclick="showPage('instances',this)"><div class="nav-dot"></div>VM Instances</div>
+    <div class="nav-item" onclick="showPage('create-vm',this)"><div class="nav-dot"></div>Launch Instance</div>
+    <div class="nav-section">Storage</div>
+    <div class="nav-item" onclick="showPage('buckets',this)"><div class="nav-dot"></div>Storage Buckets</div>
+    <div class="nav-item" onclick="showPage('create-bucket',this)"><div class="nav-dot"></div>Create Bucket</div>
+    <div class="nav-section">Monitoring</div>
+    <div class="nav-item" onclick="showPage('monitor',this)"><div class="nav-dot"></div>Usage Monitor</div>
+  </div>
+
+  <div class="main">
+
+    <!-- Dashboard Page -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">Dashboard</div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">VM Instances</div><div class="metric-val blue" id="m-vms">0</div></div>
+        <div class="metric"><div class="metric-label">Running</div><div class="metric-val green" id="m-running">0</div></div>
+        <div class="metric"><div class="metric-label">Buckets</div><div class="metric-val blue" id="m-buckets">0</div></div>
+        <div class="metric"><div class="metric-label">Total Storage</div><div class="metric-val amber" id="m-storage">0 GB</div></div>
+      </div>
+      <div class="table-wrap" id="dash-table"></div>
+    </div>
+
+    <!-- VM Instances Page -->
+    <div class="page" id="page-instances">
+      <div class="action-bar">
+        <div class="page-title" style="margin:0">VM Instances</div>
+        <button class="btn-primary" onclick="showPage('create-vm',null)">+ Launch Instance</button>
+      </div>
+      <div class="table-wrap" id="vm-table"></div>
+    </div>
+
+    <!-- Create VM Page -->
+    <div class="page" id="page-create-vm">
+      <div class="page-title">Launch VM Instance</div>
+      <div class="form-card">
+        <div class="form-row"><label class="form-label">Instance name</label>
+          <input class="form-input" id="vm-name" placeholder="e.g. web-server-01"></div>
+        <div class="form-row form-grid">
+          <div><label class="form-label">CPU (vCPUs)</label>
+            <select class="form-select" id="vm-cpu"><option>1</option><option selected>2</option><option>4</option><option>8</option></select></div>
+          <div><label class="form-label">RAM (GB)</label>
+            <select class="form-select" id="vm-ram"><option>1</option><option>2</option><option selected>4</option><option>8</option><option>16</option></select></div>
+        </div>
+        <div class="form-row"><label class="form-label">OS Image</label>
+          <select class="form-select" id="vm-os">
+            <option>Ubuntu 22.04 LTS</option><option>Amazon Linux 2</option>
+            <option>Debian 12</option><option>Windows Server 2022</option>
+          </select></div>
+        <div class="form-row"><label class="form-label">Region</label>
+          <select class="form-select" id="vm-region">
+            <option>ap-south-1</option><option>us-east-1</option><option>eu-west-1</option>
+          </select></div>
+        <button class="btn-primary" onclick="createVM()" style="width:100%">Launch Instance</button>
+      </div>
+    </div>
+
+    <!-- Buckets Page -->
+    <div class="page" id="page-buckets">
+      <div class="action-bar">
+        <div class="page-title" style="margin:0">Storage Buckets</div>
+        <button class="btn-primary" onclick="showPage('create-bucket',null)">+ Create Bucket</button>
+      </div>
+      <div class="table-wrap" id="bucket-table"></div>
+    </div>
+
+    <!-- Create Bucket Page -->
+    <div class="page" id="page-create-bucket">
+      <div class="page-title">Create Storage Bucket</div>
+      <div class="form-card">
+        <div class="form-row"><label class="form-label">Bucket name</label>
+          <input class="form-input" id="b-name" placeholder="e.g. my-app-assets"></div>
+        <div class="form-row form-grid">
+          <div><label class="form-label">Size (GB)</label>
+            <select class="form-select" id="b-size"><option>10</option><option selected>25</option><option>50</option><option>100</option></select></div>
+          <div><label class="form-label">Access</label>
+            <select class="form-select" id="b-access"><option value="private">Private</option><option value="public">Public</option></select></div>
+        </div>
+        <div class="form-row"><label class="form-label">Region</label>
+          <select class="form-select" id="b-region">
+            <option>ap-south-1</option><option>us-east-1</option><option>eu-west-1</option>
+          </select></div>
+        <button class="btn-primary" onclick="createBucket()" style="width:100%">Create Bucket</button>
+      </div>
+    </div>
+
+<!-- Monitor Page -->
+<div class="page" id="page-monitor">
+  <div class="page-title">Usage Monitor</div>
+  <div class="monitor-grid">
+
+    <div class="monitor-card">
+      <div class="monitor-title">CPU Usage (%)</div>
+      <div id="cpu-bars"></div>
+    </div>
+
+    <div class="monitor-card">
+      <div class="monitor-title">RAM Usage (%)</div>
+      <div id="ram-bars"></div>
+    </div>
+
+    <div class="monitor-card" style="grid-column: span 2;">
+      <div class="monitor-title">CPU History — last 10 ticks</div>
+      <canvas id="cpu-chart" height="80"></canvas>
+    </div>
+
+    <div class="monitor-card" style="grid-column: span 2;">
+      <div class="monitor-title">Storage used per bucket (GB)</div>
+      <canvas id="storage-chart" height="80"></canvas>
+    </div>
+
+  </div>
+</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="js/app.js"></script>
+</body>
+</html>
