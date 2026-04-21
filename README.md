@@ -14,11 +14,11 @@
 
 | Dashboard | VM Instances | Monitor |
 |-----------|-------------|---------|
-| ![Dashboard](images/dashboard.png.png) | ![Instances](images/instances.png) | ![Monitor](images/monitor.png) |
+| ![Dashboard](images/dashboard.png) | ![Instances](images/instances.png) | ![Monitor](images/monitor1.png) |
 
 | Billing | Activity Log | Bucket Files |
 |---------|-------------|-------------|
-| ![Billing](images/billing.png) | ![Log](images/log.png) | ![Files](images/file.png) |
+| ![Billing](images/billing1.png) | ![Log](images/log.png) | ![Files](images/file.png) |
 
 ---
 
