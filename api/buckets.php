@@ -14,7 +14,8 @@ $user_id = $_SESSION['user_id'];
 // ── GET — list all buckets ─────────────────────
 if ($method === 'GET') {
     $stmt = $conn->prepare(
-        "SELECT * FROM buckets WHERE user_id = ? ORDER BY created_at DESC"
+        "SELECT id, bucket_name, size_gb, access_type, region, user_id, created_at
+         FROM buckets WHERE user_id = ? ORDER BY created_at DESC"
     );
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
@@ -25,7 +26,7 @@ if ($method === 'GET') {
 // ── POST — create new bucket ───────────────────
 if ($method === 'POST') {
     $name   = trim($data['bucket_name'] ?? '');
-    $size   =      $data['size_gb']    ?? 25;
+    $size   =      $data['size_gb']     ?? 25;
     $access =      $data['access_type'] ?? 'private';
     $region = trim($data['region']      ?? '');
 
@@ -39,8 +40,8 @@ if ($method === 'POST') {
     }
 
     $stmt = $conn->prepare(
-        "INSERT INTO buckets (user_id, bucket_name, size_gb, access_type, region)
-         VALUES (?, ?, ?, ?, ?)"
+        "INSERT INTO buckets (user_id, bucket_name, size_gb, access_type, region, created_at)
+         VALUES (?, ?, ?, ?, ?, NOW())"
     );
 
     if (!$stmt) {
@@ -48,7 +49,7 @@ if ($method === 'POST') {
         exit;
     }
 
-    $stmt->bind_param("siiss", $user_id, $name, $size, $access, $region);
+    $stmt->bind_param("isiss", $user_id, $name, $size, $access, $region);
 
     if ($stmt->execute()) {
         echo json_encode([

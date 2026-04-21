@@ -8,8 +8,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
            background: #f4f5f7; display: flex; flex-direction: column; min-height: 100vh; }
-
-    /* topbar */
     .topbar { display:flex; align-items:center; justify-content:space-between;
               padding:12px 20px; background:white; border-bottom:1px solid #e5e7eb; }
     .logo { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:600; }
@@ -20,8 +18,6 @@
     .logout-btn { font-size:12px; padding:5px 12px; border:1px solid #e5e7eb;
                   border-radius:6px; background:white; cursor:pointer; color:#6b7280; }
     .logout-btn:hover { background:#f4f5f7; }
-
-    /* layout */
     .layout { display:flex; flex:1; }
     .sidebar { width:190px; background:white; border-right:1px solid #e5e7eb;
                padding:16px 0; flex-shrink:0; }
@@ -34,14 +30,10 @@
     .nav-item.active { background:#f0f7ff; color:#185FA5;
                        border-left-color:#185FA5; font-weight:500; }
     .nav-dot { width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.5; }
-
-    /* main */
     .main { flex:1; padding:24px; overflow:auto; }
     .page { display:none; }
     .page.active { display:block; }
     .page-title { font-size:18px; font-weight:600; margin-bottom:20px; color:#111; }
-
-    /* metrics */
     .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
     .metric { background:white; border:1px solid #e5e7eb; border-radius:10px; padding:16px; }
     .metric-label { font-size:12px; color:#6b7280; margin-bottom:6px; }
@@ -49,8 +41,6 @@
     .metric-val.blue { color:#185FA5; }
     .metric-val.green { color:#3B6D11; }
     .metric-val.amber { color:#854F0B; }
-
-    /* table */
     .table-wrap { background:white; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; }
     .table-head { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr;
                   padding:10px 16px; background:#f9fafb; font-size:11px; font-weight:600;
@@ -62,16 +52,12 @@
     .table-row:last-child { border-bottom:none; }
     .table-row:hover { background:#fafafa; }
     .empty { padding:32px; text-align:center; color:#9ca3af; font-size:13px; }
-
-    /* status pills */
     .pill { display:inline-flex; align-items:center; gap:4px; font-size:11px;
             font-weight:500; padding:3px 8px; border-radius:20px; }
     .pill.running { background:#EAF3DE; color:#3B6D11; }
     .pill.stopped { background:#f3f4f6; color:#6b7280; }
     .pill.pending { background:#FAEEDA; color:#854F0B; }
     .pill-dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
-
-    /* buttons */
     .action-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
     .btn-primary { padding:8px 16px; background:#185FA5; color:white; border:none;
                    border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; }
@@ -80,8 +66,6 @@
               border-radius:6px; background:white; color:#6b7280; cursor:pointer; margin-right:4px; }
     .btn-sm:hover { background:#f4f5f7; }
     .btn-sm.red:hover { background:#FCEBEB; color:#A32D2D; border-color:#fca5a5; }
-
-    /* forms */
     .form-card { background:white; border:1px solid #e5e7eb; border-radius:10px;
                  padding:24px; max-width:480px; }
     .form-row { margin-bottom:16px; }
@@ -92,8 +76,6 @@
                                  background:white; color:#111; outline:none; }
     .form-input:focus, .form-select:focus { border-color:#185FA5; }
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-
-    /* monitor */
     .monitor-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
     .monitor-card { background:white; border:1px solid #e5e7eb; border-radius:10px; padding:16px; }
     .monitor-title { font-size:12px; font-weight:600; color:#6b7280;
@@ -103,8 +85,6 @@
     .bar-track { flex:1; height:8px; background:#f3f4f6; border-radius:4px; overflow:hidden; }
     .bar-fill { height:100%; border-radius:4px; transition:width .6s ease; }
     .bar-val { width:36px; text-align:right; font-weight:500; }
-
-    /* toast */
     #toast { position:fixed; bottom:20px; right:20px; background:#185FA5; color:white;
              padding:10px 18px; border-radius:8px; font-size:13px;
              opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; }
@@ -114,7 +94,6 @@
 </head>
 <body>
 
-<!-- Topbar -->
 <div class="topbar">
   <div class="logo">
     <div class="logo-icon"><svg viewBox="0 0 16 16"><path d="M8 1L14 4.5v7L8 15 2 11.5v-7z"/></svg></div>
@@ -128,7 +107,6 @@
 
 <div class="layout">
 
-  <!-- Sidebar -->
   <div class="sidebar">
     <div class="nav-section">Overview</div>
     <div class="nav-item active" onclick="showPage('dashboard',this)"><div class="nav-dot"></div>Dashboard</div>
@@ -140,32 +118,93 @@
     <div class="nav-item" onclick="showPage('create-bucket',this)"><div class="nav-dot"></div>Create Bucket</div>
     <div class="nav-section">Monitoring</div>
     <div class="nav-item" onclick="showPage('monitor',this)"><div class="nav-dot"></div>Usage Monitor</div>
+    <div class="nav-item" onclick="showPage('log',this)"><div class="nav-dot"></div>Activity Log</div>
+    <div class="nav-item" onclick="showPage('billing',this)"><div class="nav-dot"></div>Billing</div>
   </div>
 
   <div class="main">
 
-    <!-- Dashboard Page -->
+    <!-- ① Dashboard -->
     <div class="page active" id="page-dashboard">
       <div class="page-title">Dashboard</div>
-      <div class="metrics">
+      <div class="metrics" style="grid-template-columns:repeat(5,1fr)">
         <div class="metric"><div class="metric-label">VM Instances</div><div class="metric-val blue" id="m-vms">0</div></div>
         <div class="metric"><div class="metric-label">Running</div><div class="metric-val green" id="m-running">0</div></div>
         <div class="metric"><div class="metric-label">Buckets</div><div class="metric-val blue" id="m-buckets">0</div></div>
         <div class="metric"><div class="metric-label">Total Storage</div><div class="metric-val amber" id="m-storage">0 GB</div></div>
+        <div class="metric"><div class="metric-label">Est. monthly bill</div><div class="metric-val green" id="b-total">$0.00</div></div>
       </div>
+      <p style="font-size:13px;font-weight:600;color:#6b7280;margin-bottom:10px;">Recent VM Instances</p>
       <div class="table-wrap" id="dash-table"></div>
+      <p style="font-size:13px;font-weight:600;color:#6b7280;margin:20px 0 10px;">Recent Storage Buckets</p>
+      <div class="table-wrap" id="dash-bucket-table"></div>
     </div>
 
-    <!-- VM Instances Page -->
+    <!-- ② Billing -->
+    <div class="page" id="page-billing">
+      <div class="action-bar">
+        <div class="page-title" style="margin:0">Monthly Cost Estimate</div>
+        <button class="btn-sm" onclick="exportBillingCSV()">⬇ Export Cost Report</button>
+      </div>
+      <div class="metrics" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px;">
+        <div class="metric"><div class="metric-label">Compute cost</div><div class="metric-val blue" id="b-compute">$0.00</div></div>
+        <div class="metric"><div class="metric-label">Storage cost</div><div class="metric-val amber" id="b-storage">$0.00</div></div>
+        <div class="metric"><div class="metric-label">Total monthly bill</div><div class="metric-val green" id="b-total">$0.00</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div class="monitor-card">
+          <div class="monitor-title">Compute vs Storage cost</div>
+          <canvas id="cost-donut-chart" height="200"></canvas>
+        </div>
+        <div class="monitor-card">
+          <div class="monitor-title">Cost per resource</div>
+          <canvas id="cost-bar-chart" height="200"></canvas>
+        </div>
+      </div>
+      <p style="font-size:13px;font-weight:600;color:#6b7280;margin-bottom:10px;">VM instance breakdown</p>
+      <div class="table-wrap" id="billing-vm-table" style="margin-bottom:20px;"></div>
+      <p style="font-size:13px;font-weight:600;color:#6b7280;margin-bottom:10px;">Storage bucket breakdown</p>
+      <div class="table-wrap" id="billing-bucket-table" style="margin-bottom:20px;"></div>
+      <div style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
+        <p style="font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;">Simulated pricing rates</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:#6b7280;">
+          <span>1 vCPU running</span><span style="color:#111;font-weight:500;">$0.048 / hour</span>
+          <span>1 GB RAM running</span><span style="color:#111;font-weight:500;">$0.006 / hour</span>
+          <span>Stopped instance</span><span style="color:#111;font-weight:500;">$0.005 / hour</span>
+          <span>Storage (per GB)</span><span style="color:#111;font-weight:500;">$0.023 / GB / month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ VM Instances -->
     <div class="page" id="page-instances">
       <div class="action-bar">
         <div class="page-title" style="margin:0">VM Instances</div>
-        <button class="btn-primary" onclick="showPage('create-vm',null)">+ Launch Instance</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
+          <button class="btn-primary" onclick="showPage('create-vm',null)">+ Launch Instance</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <input id="vm-search" class="form-input" style="max-width:220px;" placeholder="Search by name..." oninput="filterInstances()">
+        <select id="vm-filter-status" class="form-select" style="max-width:140px;" onchange="filterInstances()">
+          <option value="">All statuses</option>
+          <option value="running">Running</option>
+          <option value="stopped">Stopped</option>
+          <option value="pending">Pending</option>
+        </select>
+        <select id="vm-filter-region" class="form-select" style="max-width:160px;" onchange="filterInstances()">
+          <option value="">All regions</option>
+          <option value="ap-south-1">ap-south-1</option>
+          <option value="us-east-1">us-east-1</option>
+          <option value="eu-west-1">eu-west-1</option>
+        </select>
+        <button class="btn-sm" onclick="clearFilters()">✕ Clear</button>
       </div>
       <div class="table-wrap" id="vm-table"></div>
     </div>
 
-    <!-- Create VM Page -->
+    <!-- ④ Launch Instance -->
     <div class="page" id="page-create-vm">
       <div class="page-title">Launch VM Instance</div>
       <div class="form-card">
@@ -190,16 +229,39 @@
       </div>
     </div>
 
-    <!-- Buckets Page -->
-    <div class="page" id="page-buckets">
-      <div class="action-bar">
-        <div class="page-title" style="margin:0">Storage Buckets</div>
-        <button class="btn-primary" onclick="showPage('create-bucket',null)">+ Create Bucket</button>
-      </div>
-      <div class="table-wrap" id="bucket-table"></div>
+  <!-- ⑤ Storage Buckets -->
+<div class="page" id="page-buckets">
+  <div class="action-bar">
+    <div class="page-title" style="margin:0">Storage Buckets</div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-sm" onclick="exportBucketsCSV()">⬇ Export CSV</button>
+      <button class="btn-primary" onclick="showPage('create-bucket',null)">+ Create Bucket</button>
     </div>
+  </div>
 
-    <!-- Create Bucket Page -->
+  <!-- Filters -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+    <input id="bucket-search" class="form-input" style="max-width:220px;" placeholder="Search by name..." oninput="filterBuckets()">
+    <select id="bucket-filter-access" class="form-select" style="max-width:140px;" onchange="filterBuckets()">
+      <option value="">All access</option>
+      <option value="private">Private</option>
+      <option value="public">Public</option>
+    </select>
+    <select id="bucket-filter-region" class="form-select" style="max-width:160px;" onchange="filterBuckets()">
+      <option value="">All regions</option>
+      <option value="ap-south-1">ap-south-1</option>
+      <option value="us-east-1">us-east-1</option>
+      <option value="eu-west-1">eu-west-1</option>
+    </select>
+    <button class="btn-sm" onclick="clearBucketFilters()">✕ Clear</button>
+  </div>
+
+  <!-- Bucket list -->
+  <div class="table-wrap" id="bucket-table"></div>
+</div>
+ 
+
+    <!-- ⑥ Create Bucket -->
     <div class="page" id="page-create-bucket">
       <div class="page-title">Create Storage Bucket</div>
       <div class="form-card">
@@ -218,34 +280,80 @@
         <button class="btn-primary" onclick="createBucket()" style="width:100%">Create Bucket</button>
       </div>
     </div>
-
-<!-- Monitor Page -->
-<div class="page" id="page-monitor">
-  <div class="page-title">Usage Monitor</div>
-  <div class="monitor-grid">
-
-    <div class="monitor-card">
-      <div class="monitor-title">CPU Usage (%)</div>
-      <div id="cpu-bars"></div>
+    <!--  9. Bucket Contents -->
+<div class="page" id="page-bucket-files">
+  <div class="action-bar">
+    <div>
+      <div class="page-title" style="margin:0" id="bucket-files-title">Bucket Files</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:2px;" id="bucket-files-sub"></div>
     </div>
+    <button class="btn-sm" onclick="showPage('buckets',null)">← Back to Buckets</button>
+  </div>
 
-    <div class="monitor-card">
-      <div class="monitor-title">RAM Usage (%)</div>
-      <div id="ram-bars"></div>
+  <!-- Upload area -->
+  <div style="background:white;border:2px dashed #d1d5db;border-radius:10px;padding:24px;text-align:center;margin-bottom:20px;cursor:pointer;"
+       onclick="document.getElementById('file-upload-input').click()"
+       ondragover="event.preventDefault();this.style.borderColor='#185FA5'"
+       ondragleave="this.style.borderColor='#d1d5db'"
+       ondrop="event.preventDefault();this.style.borderColor='#d1d5db';handleFileDrop(event)">
+    <div style="font-size:28px;margin-bottom:8px;">☁️</div>
+    <p style="font-size:13px;font-weight:500;color:#374151;">Click to upload or drag and drop</p>
+    <p style="font-size:12px;color:#9ca3af;margin-top:4px;">Any file type — max 10MB</p>
+    <input type="file" id="file-upload-input" style="display:none" onchange="uploadFile(this.files[0])">
+  </div>
+
+  <!-- Upload progress -->
+  <div id="upload-progress" style="display:none;margin-bottom:16px;">
+    <div style="font-size:12px;color:#6b7280;margin-bottom:6px;" id="upload-status">Uploading...</div>
+    <div style="background:#f3f4f6;border-radius:4px;height:6px;">
+      <div id="upload-bar" style="height:100%;background:#185FA5;border-radius:4px;width:0%;transition:width .3s;"></div>
     </div>
+  </div>
 
-    <div class="monitor-card" style="grid-column: span 2;">
-      <div class="monitor-title">CPU History — last 10 ticks</div>
-      <canvas id="cpu-chart" height="80"></canvas>
+  <!-- Files table -->
+  <div class="table-wrap" id="files-table"></div>
+
+  <!-- Preview modal -->
+  <div id="preview-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:12px;width:90%;max-width:800px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #e5e7eb;">
+        <span style="font-size:14px;font-weight:500;" id="preview-filename">Preview</span>
+        <button class="btn-sm" onclick="closePreview()">✕ Close</button>
+      </div>
+      <div style="flex:1;overflow:auto;padding:0;" id="preview-content"></div>
     </div>
-
-    <div class="monitor-card" style="grid-column: span 2;">
-      <div class="monitor-title">Storage used per bucket (GB)</div>
-      <canvas id="storage-chart" height="80"></canvas>
-    </div>
-
   </div>
 </div>
+    <!-- ⑦ Usage Monitor -->
+    <div class="page" id="page-monitor">
+      <div class="page-title">Usage Monitor</div>
+      <div class="monitor-grid">
+        <div class="monitor-card">
+          <div class="monitor-title">CPU Usage (%)</div>
+          <div id="cpu-bars"></div>
+        </div>
+        <div class="monitor-card">
+          <div class="monitor-title">RAM Usage (%)</div>
+          <div id="ram-bars"></div>
+        </div>
+        <div class="monitor-card" style="grid-column:span 2;">
+          <div class="monitor-title">CPU History — last 10 ticks</div>
+          <canvas id="cpu-chart" height="80"></canvas>
+        </div>
+        <div class="monitor-card" style="grid-column:span 2;">
+          <div class="monitor-title">Storage used per bucket (GB)</div>
+          <canvas id="storage-chart" height="80"></canvas>
+        </div>
+      </div>
+      <div id="monitor-bill"></div>
+    </div>
+
+    <!-- ⑧ Activity Log -->
+    <div class="page" id="page-log">
+      <div class="page-title">Activity Log</div>
+      <div class="table-wrap" id="log-table"></div>
+    </div>
+
   </div>
 </div>
 

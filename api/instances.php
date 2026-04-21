@@ -14,7 +14,8 @@ $user_id = $_SESSION['user_id'];
 // ── GET — list all instances ───────────────────
 if ($method === 'GET') {
     $stmt = $conn->prepare(
-        "SELECT * FROM instances WHERE user_id = ? ORDER BY created_at DESC"
+        "SELECT id, name, cpu, ram, os, region, status, user_id, created_at
+         FROM instances WHERE user_id = ? ORDER BY created_at DESC"
     );
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
@@ -36,8 +37,8 @@ if ($method === 'POST') {
     }
 
     $stmt = $conn->prepare(
-        "INSERT INTO instances (user_id, name, cpu, ram, os, region, status)
-         VALUES (?, ?, ?, ?, ?, ?, 'running')"
+        "INSERT INTO instances (user_id, name, cpu, ram, os, region, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, 'running', NOW())"
     );
 
     if (!$stmt) {
@@ -45,7 +46,7 @@ if ($method === 'POST') {
         exit;
     }
 
-    $stmt->bind_param("siisss", $user_id, $name, $cpu, $ram, $os, $region);
+    $stmt->bind_param("isiiss", $user_id, $name, $cpu, $ram, $os, $region);
 
     if ($stmt->execute()) {
         echo json_encode([
@@ -56,6 +57,7 @@ if ($method === 'POST') {
         echo json_encode(["error" => $stmt->error]);
     }
 }
+
 
 // ── PUT — start or stop instance ──────────────
 if ($method === 'PUT') {

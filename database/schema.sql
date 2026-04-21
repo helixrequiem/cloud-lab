@@ -28,11 +28,12 @@ CREATE TABLE instances (
 -- Step 4: Storage Buckets table
 CREATE TABLE buckets (
   id          INT AUTO_INCREMENT PRIMARY KEY,
-  user_id     INT         NOT NULL,
+  user_id     INT          NOT NULL,
   bucket_name VARCHAR(100) NOT NULL,
-  size_gb     INT         DEFAULT 25,
+  size_gb     INT          DEFAULT 25,
   access_type ENUM('private','public') DEFAULT 'private',
   region      VARCHAR(50),
-  created_at  TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+  created_at  TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+

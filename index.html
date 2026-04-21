@@ -185,6 +185,11 @@
     const data = await res.json();
     if (data.success) {
       localStorage.setItem('user_name', data.name);
+      await fetch('api/log.php', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ action: 'Logged in', details: data.name })
+});
       window.location.href = 'dashboard.html';
     } else {
       showMsg('login-msg', data.error, 'error');

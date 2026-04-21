@@ -3,3 +3,6 @@
 
 # Ignore XAMPP config with passwords
 api/config.php
+
+uploads/*
+!uploads/.gitkeep
